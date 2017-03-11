@@ -162,11 +162,14 @@
 		}
 
 		public function post_confirmarproyecto() {
-			$id_proyecto = Input::get('id_proyecto');
-			$proyecto = Proyecto::find($id_proyecto);
-			$proyecto->costo = Input::get('costoprov');
-	        $proyecto->save();		
-	        $id = $proyecto->id_proyecto;
+			$costoprov = Input::get('costoprov');
+			if (!empty($costoprov)) {
+				$id_proyecto = Input::get('id_proyecto');
+				$proyecto = Proyecto::find($id_proyecto);
+				$proyecto->costo = Input::get('costoprov');
+		        $proyecto->save();
+			}
+			
 			return Redirect::to('solicitudes_proyectos');
 		}
 
@@ -515,7 +518,7 @@
 			$id = Input::get('id_proyecto');
 			return $this->get_continuarEtapaSolicitud($id);
 		}
-	}
+		}
 		public function get_continuarRecursoSolicitud($id) {
 			$idproyecto = $id;
 
@@ -572,6 +575,7 @@
 				$precurso = new ProyectoRecurso;
 				$precurso->id_proyecto = Input::get('id_proyecto');
 				$precurso->id_recurso = Input::get('recurso');
+				$costo = Input::get('costo');
 				$precurso->save();
 				$id = Input::get('id_proyecto');
 				return $this->get_continuarRecursoSolicitud($id)
@@ -610,8 +614,10 @@
 													->with('cantrecasignados', $cantrecasignados)
 													->with('costo', $costo);
 		}
-		public function post_confirmarproyectosolicitud() {
+		public function destroy($id) {
 			return 'Sent!';
-		}		
+		}
+
+			
 	}
 ?>

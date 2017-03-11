@@ -47,7 +47,9 @@ Route::group(['before' => 'auth'], function()
 	Route::get('continuar_recurso_solicitud{id}', 'ProyectosController@get_continuarRecursoSolicitud')->where('id', '[0-9]+');
 	Route::post('continuar_recurso_solicitud', 'ProyectosController@post_continuarRecursoSolicitud');
 	Route::get('confirma_proyecto_solicitud{id}', 'ProyectosController@get_confirmarproyectosolicitud')->where('id', '[0-9]+');
-	Route::post('confirma_proyecto_solicitud', 'ProyectosController@post_confirmarproyecto_solicitud');
+	Route::post('confirma_proyecto_solicitud', 'ProyectosController@post_confirmarproyecto');
+
+	Route::post('continuar_recurso_solicitud{id}', 'ProyectosController@destroy');
 
 	//Editar solicitudes
 	Route::get('edit_solicitud{id}', 'ProyectosController@getEditSolicitud')->where('id', '[0-9]+');

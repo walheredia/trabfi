@@ -63,7 +63,7 @@
 					<td>{{ $ra->seniority }}</td>
 					<td>{{ $ra->actividad }}</td>
 			 		<td>{{ $ra->edad }}</td>
-					<td><a href="" <span class="glyphicon glyphicon-remove"></span></a></td>
+					<td><a href="{{ action('ProyectosController@destroy', $ra->id_proyecto) }}" <span class="glyphicon glyphicon-remove"></span></a></td>
 				</tr>
 				@endforeach
 	  		</tbody>	

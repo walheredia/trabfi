@@ -20,7 +20,7 @@
 			      </ul>
 			    </div>
 			@endif
-			<form action="{{ URL::asset('confirma_proyecto') }}" method="POST" class="form-vertical" role="form">
+			<form action="{{ URL::asset('confirma_proyecto_solicitud') }}" method="POST" class="form-vertical" role="form">
 				<fieldset class="cool-fieldset">
 				<input type="hidden" name="id_proyecto" id="id_proyecto" value="{{ $id }}">
 					<div class="form-group">
