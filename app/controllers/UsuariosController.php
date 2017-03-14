@@ -69,13 +69,13 @@
 	public function destroy($id)
 	{	
 	$user = User::find($id);	        
-	        if (is_null ($user))
-	        {
-	            App::abort(404);
-	        }
-	        $user->delete();
-	        $users = User::all();
-	        return View::make('lista_usuarios')->with('users', $users);
+        if (is_null ($user))
+        {
+            App::abort(404);
+        }
+        $user->delete();
+        $users = User::all();
+        return View::make('lista_usuarios')->with('users', $users);
 	}
 
 	public function all_users() {

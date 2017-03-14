@@ -41,7 +41,7 @@
 					<td>{{ $p->costo_tot }}</td>
 					<td style="color: green;"><strong>{{ $p->costo }}</strong></td>
 			 		<td><a href="{{ action('ProyectosController@getEditSolicitud', $p->id_proyecto) }}"><span class="glyphicon glyphicon-pencil"></a></span></td>
-					<td><a href="" <span class="glyphicon glyphicon-remove"></span></a></td>
+					<td><a href="{{ action('ProyectosController@RemoveSolicitud', $p->id_proyecto) }}" <span class="glyphicon glyphicon-remove"></span></a></td>
 				</tr>
 				@endforeach
 	  		</tbody>	

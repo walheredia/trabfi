@@ -387,6 +387,11 @@
 					foreach ($recasignados as $rec) {
 						$costo = $costo + $rec->costo;
 					}
+
+					if ($p->id_mpago == 2) {
+						$costo = ($costo +( $costo * 0.10));
+					}
+
 					$p->costo_tot = $costo;
 				}
 				if (empty($proyectos)) {
@@ -419,6 +424,11 @@
 					foreach ($recasignados as $rec) {
 						$costo = $costo + $rec->costo;
 					}
+
+					if ($p->id_mpago == 2) {
+						$costo = ($costo +( $costo * 0.10));
+					}
+
 					$p->costo_tot = $costo;
 				}
 				if (empty($proyectos)) {
@@ -461,6 +471,7 @@
 			if($validar->fails())
 			{	
 				Input::flash();
+
 				return Redirect::back()->withInput()->withErrors($validar);
 			}
 			else
@@ -538,10 +549,21 @@
 			->join('seniorities' , 'seniorities.id_seniority' , '=' , 'recursos.id_seniority')
 			->where('proyectorecursos.id_proyecto' , '=' , $idproyecto)
 			->get();
+
+			$proyecto = DB::table('proyectos')
+			->join('users' , 'proyectos.id_cliente' , '=' , 'users.id')
+			->join('mpagos' , 'proyectos.id_mpago' , '=' , 'mpagos.id_mpago')
+			->where('proyectos.id_proyecto' , '=' , $id)
+			->get();
+			
 			$costo = 0;
 			foreach ($recasignados as $rec) {
 				$costo = $costo + $rec->costo;
 			}
+			if ($proyecto[0]->id_mpago == 2) {
+				$costo = ($costo +( $costo * 0.10));
+			}
+
 
 			return View::make('continuar_recurso_solicitud')->with('recursos', $recursos)
 													->with('id', $id)
@@ -563,7 +585,17 @@
 				$idusuario = Auth::user()->id_creador;			
 				$recursos = Recurso::where('id_proveedor' , '=' , $idusuario)->get();
 				$id = Input::get('id_proyecto');
-				$costo = Input::get('costo');
+				
+				$recasignados = DB::table('proyectorecursos')
+				->join('recursos' , 'recursos.id_recurso' , '=' , 'proyectorecursos.id_recurso')
+				->join('seniorities' , 'seniorities.id_seniority' , '=' , 'recursos.id_seniority')
+				->where('proyectorecursos.id_proyecto' , '=' , $id)
+				->get();
+				
+				$costo = 0;
+				foreach ($recasignados as $rec) {
+					$costo = $costo + $rec->costo;
+				}
 				
 				return View::make('continuar_recurso_solicitud')->with('id', $id)
 																->withErrors($validar)
@@ -578,6 +610,17 @@
 				$costo = Input::get('costo');
 				$precurso->save();
 				$id = Input::get('id_proyecto');
+
+				$recasignados = DB::table('proyectorecursos')
+				->join('recursos' , 'recursos.id_recurso' , '=' , 'proyectorecursos.id_recurso')
+				->join('seniorities' , 'seniorities.id_seniority' , '=' , 'recursos.id_seniority')
+				->where('proyectorecursos.id_proyecto' , '=' , $id)
+				->get();
+				
+				$costo = 0;
+				foreach ($recasignados as $rec) {
+					$costo = $costo + $rec->costo;
+				}
 				return $this->get_continuarRecursoSolicitud($id)
 							->with('costo', $costo);
 			}
@@ -605,6 +648,11 @@
 				$costo = $costo + $rec->costo;
 			}
 
+
+			if ($proyecto[0]->id_mpago == 2) {
+				$costo = ($costo +( $costo * 0.10));
+			}
+
 			
 			return View::make('confirma_proyecto_solicitud')->with('proyecto', $proyecto)
 													->with('etapas', $etapas)
@@ -614,9 +662,21 @@
 													->with('cantrecasignados', $cantrecasignados)
 													->with('costo', $costo);
 		}
-		public function destroy($id) {
-			return 'Sent!';
+
+		public function RemoveSolicitud($id) {
+			$proyecto = Proyecto::find($id);	        
+	        if (is_null ($proyecto))
+	        {
+	            App::abort(404);
+	        }
+	        $proyecto->delete();
+
+	        return $this->all_solicitudes();
 		}
+
+		/*public function destroy($id) {
+			return 'Sent!';
+		}*/
 
 			
 	}
